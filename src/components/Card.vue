@@ -1,6 +1,6 @@
 "<template>
-  <div class="card">
-    <div class="card-side front" v-if="visible">Front</div>
+  <div class="card" @click="selectCard">
+    <div class="card-side front" v-if="visible">{{ value }}</div>
     <div class="card-side back" v-else>Back</div>
   </div>
 </template>
@@ -8,10 +8,29 @@
 <script>
 export default {
   props: {
+    position: {
+      type: Number,
+      required: true,
+    },
+    value: {
+      type: Number,
+      required: true,
+    },
     visible: {
       type: Boolean,
-      default: false,
+      default: true,
     },
+  },
+  setup(props, context) {
+    const selectCard = () => {
+      context.emit("select-card", {
+        position: props.position,
+      });
+    };
+
+    return {
+      selectCard,
+    };
   },
 };
 </script>

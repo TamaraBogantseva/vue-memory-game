@@ -1,11 +1,19 @@
 <template>
   <h1>Memory Game</h1>
   <div class="board">
-    <Card v-for="(card, index) in cardsList" :key="`card-${index}`" />
+    <Card
+      v-for="(card, index) in cardsList"
+      :key="`card-${index}`"
+      :visible="card.visible"
+      :value="card.value"
+      :position="card.position"
+      @select-card="flipCard"
+    />
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import Card from "./components/Card.vue";
 
 export default {
@@ -15,12 +23,22 @@ export default {
   },
 
   setup() {
-    const cardsList = [];
+    const cardsList = ref([]);
+
     for (let i = 0; i < 16; i++) {
-      cardsList.push(i);
+      cardsList.value.push({
+        value: i,
+        visible: false,
+        position: i,
+      });
     }
+
+    const flipCard = (payload) => {
+      cardsList.value[payload.position].visible = true;
+    };
     return {
       cardsList,
+      flipCard,
     };
   },
 };
